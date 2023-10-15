@@ -70,7 +70,7 @@ public class RobotContainer {
    */
   private void configureBindings() {
     m_driverController.a().onTrue(zeroHeading); 
-    m_driverController.x().onTrue(setToX);
+    m_driverController.x().onTrue(setToX.withTimeout(1));
     m_driverController.b().onTrue(setTo0);
   }
     
