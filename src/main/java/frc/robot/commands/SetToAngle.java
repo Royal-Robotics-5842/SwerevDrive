@@ -6,26 +6,31 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SwerveSubsystem;
 
-public class SetSwerveSpeed extends CommandBase {
+public class SetToAngle extends CommandBase {
 
   private final SwerveSubsystem swerve;
+  private final double angle;
 
-  public SetSwerveSpeed(SwerveSubsystem swerve) {
+  public SetToAngle(SwerveSubsystem swerve, double angle) {
     this.swerve = swerve;
+    this.angle = angle;
     addRequirements(swerve);
+  
   }
 
+  // Called when the command is initially scheduled.
   @Override
   public void initialize() {}
 
+  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute(){
 
-    //This is making the swervemodule drive at a constant speed
-    swerve.frontLeft.setSpeedDrive(0.3);
-    swerve.frontRight.setSpeedDrive(0.3);
-    swerve.backLeft.setSpeedDrive(0.3);
-    swerve.backRight.setSpeedDrive(0.3);
+    //Setting the swerve to desired angle
+    swerve.frontLeft.setToAngle(angle);
+    swerve.frontRight.setToAngle(angle);
+    swerve.backLeft.setToAngle(angle);
+    swerve.backRight.setToAngle(angle);
   }
   
   // Called once the command ends or is interrupted.
@@ -36,6 +41,6 @@ public class SetSwerveSpeed extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return false; //RUN WITH TIMEOUT
   }
 }

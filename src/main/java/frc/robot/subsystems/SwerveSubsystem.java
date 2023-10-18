@@ -17,6 +17,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 
+//Making the SwerveModules with all the different paramters
+
 public class SwerveSubsystem extends SubsystemBase {
     public final SwerveModule frontLeft = new SwerveModule(
             DriveConstants.kFrontLeftDriveMotorPort,
@@ -46,8 +48,10 @@ public class SwerveSubsystem extends SubsystemBase {
             DriveConstants.kBackRightTurningMotorReversed,
             DriveConstants.kBackRightTurnAbsoluteEncoderPort);
 
-    public final AHRS gyro = new AHRS(SPI.Port.kMXP);
+    public final AHRS gyro = new AHRS(SPI.Port.kMXP); //Defineing the Gyro
  
+
+    //THIS IS JUST FOR TRAJECTORIES
     private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics,
     new Rotation2d(0),  new SwerveModulePosition[] {
       frontLeft.getPosition(),
@@ -56,7 +60,8 @@ public class SwerveSubsystem extends SubsystemBase {
       backRight.getPosition()
     });
 
-    public final Field2d m_field = new Field2d();
+    
+    public final Field2d m_field = new Field2d(); //For Glass
 
     public SwerveSubsystem() {   
       new Thread(() -> {
@@ -71,32 +76,33 @@ public class SwerveSubsystem extends SubsystemBase {
 
 
   public void zeroHeading() {
-      gyro.reset();
+      gyro.reset(); //Making all values 0 (Pitch, Yaw, Roll)
   }
   
   public double getHeading() 
   {
-    return Math.IEEEremainder(gyro.getAngle(), 360); 
+    return Math.IEEEremainder(gyro.getAngle(), 360); //Get the position the swerve is facing
   }
     
   public Rotation2d getRotation2d()
   {
-    //System.out.print("Bro: " + getHeading());
-    return Rotation2d.fromDegrees(getHeading());
+    return Rotation2d.fromDegrees(getHeading()); //For FRC functions, just converts where your facing to a "Rotation2d" type
   }
   
+  //FOR TRAJECTORIES
   public Pose2d getPose() {
     return odometer.getPoseMeters();
-}
+  } 
 
-public void resetOdometry(Pose2d pose) {
+  //FOR TRAJECTORIES
+  public void resetOdometry(Pose2d pose) {
     odometer.resetPosition(getRotation2d(), new SwerveModulePosition[] {
       frontLeft.getPosition(),
       frontRight.getPosition(),
       backLeft.getPosition(),
       backRight.getPosition()
      } ,pose);
-}
+  }
 
   public void stopModules() 
   {
@@ -108,6 +114,7 @@ public void resetOdometry(Pose2d pose) {
 
   public void setModuleStates(SwerveModuleState[] desiredStates) 
   {
+    //Not sure tbh, just FRC stuff -- read WPILIB Documentation
     frontLeft.setDesiredState(desiredStates[0]);
     frontRight.setDesiredState(desiredStates[1]); 
     backLeft.setDesiredState(desiredStates[2]);
@@ -118,6 +125,9 @@ public void resetOdometry(Pose2d pose) {
   @Override
 
   public void periodic() {
+
+    //ALL OF THIS HAPPENS 5 TIMES A SECOND
+    //Just stuff for debugging and for Driver!
 
       odometer.update(getRotation2d(), new SwerveModulePosition[] {
       frontLeft.getPosition(),
